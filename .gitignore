@@ -12,3 +12,5 @@ certs/
 .claude/settings.local.json
 
 structurizr/.structurizr/
+backups/
+*.sql

@@ -1,0 +1,45 @@
+databaseChangeLog:
+- changeSet:
+    id: 1765999413518-1
+    author: mihailsmonin (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: doctor_appointment_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: patient_name
+            type: VARCHAR(255)
+        - column:
+            name: patient_phone
+            type: VARCHAR(255)
+        - column:
+            name: patient_email
+            type: VARCHAR(255)
+        - column:
+            name: doctor_specialization
+            type: VARCHAR(255)
+        - column:
+            name: creation_date
+            type: date
+        tableName: doctor_appointment
+- changeSet:
+    id: 1765999413518-2
+    author: mihailsmonin (generated)
+    changes:
+    - createSequence:
+        cacheSize: 1
+        cycle: false
+        dataType: bigint
+        incrementBy: 1
+        maxValue: 9223372036854775807
+        minValue: 1
+        sequenceName: doctor_appointment_seq
+        startValue: 1
+

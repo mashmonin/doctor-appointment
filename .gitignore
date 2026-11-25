@@ -1,0 +1,14 @@
+.DS_Store
+.idea/
+*.iml
+.gradle/
+build/
+node_modules/
+dist/
+*.log
+.env
+certs/
+*.pem
+.claude/settings.local.json
+
+structurizr/.structurizr/

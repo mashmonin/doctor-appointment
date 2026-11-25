@@ -1,0 +1,165 @@
+/*@import "tailwindcss";*/
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+}
+
+/* Основной контейнер вкладок */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent; /* или любой другой цвет фона */
+}
+
+/* Цвет ссылок и состояние hover */
+.tabs-container a {
+  color: white;
+}
+
+.tabs-container a:hover {
+  color: white;
+}
+
+/* Убираем стандартную полоску выделения снизу */
+.tabs-container .ant-tabs-ink-bar {
+  display: none;
+}
+
+/* Нижняя линия для активной вкладки */
+.tabs-container .ant-tabs-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 20%;
+  right: 20%; /* Чуть шире, чтобы покрыть всю область */
+  height: 2px;
+  background: #ff9a3c;
+}
+
+/* Основной контент */
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* Секция */
+section {
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Логотип */
+img.logopic {
+  max-width: 112px;
+  height: 90px;
+  border-radius: 5px;
+  margin: auto;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-group {
+  width: calc(25% - 10px); /* каждое поле занимает четверть ширины экрана */
+  margin-right: 10px; /* пространство между полями */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input, .form-group select {
+  width: 100%; /* заполнение пространства контейнера */
+}
+
+/* Основная таблица */
+.records-table {
+  width: 100%;
+  border-collapse: collapse; /* Объединяем границы клеток */
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+/* Заголовок таблицы */
+.records-table caption {
+  font-size: 1.5em;
+  text-align: center;
+  padding-bottom: 10px;
+  color: #333;
+}
+
+/* Ячейки заголовков (th) */
+.records-table th {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+/* Основные ячейки (td) */
+.records-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+/* Чередование строк для улучшения читаемости */
+.records-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Наведение курсора */
+.records-table tbody tr:hover {
+  background-color: #eaeaea;
+}
+
+/* Подсветка активной строки */
+.records-table tbody tr.active-row {
+  background-color: #dfffdc !important;
+}
+
+/* Изменение ширины и высоты поля DatePicker */
+.ant-picker {
+  width: 350px; /* Ширина поля */
+}
+
+.datepicker-wrapper {
+  margin-top: 20px;
+}
+
+.search-button {
+  margin-top: 20px;
+  margin-left: 280px;
+}
+
+.text-input {
+  width: 350px;
+}

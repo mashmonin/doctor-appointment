@@ -1,0 +1,11 @@
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - './nginx.prod.conf:/etc/nginx/nginx.conf:ro'
+      - type: bind
+        source: ./certs
+        target: /etc/nginx/certs
+        read_only: true

@@ -1,0 +1,65 @@
+networks:
+  dev:
+
+volumes:
+  pg_doctor_appointment:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    depends_on:
+      da-frontend:
+        condition: service_started
+      da-backend:
+        condition: service_healthy
+    networks:
+      - dev
+
+  da-frontend:
+    build:
+      context: ./frontend
+    networks:
+      - dev
+
+  da-db:
+    image: postgres:18
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pg_doctor_appointment:/var/lib/postgresql/data
+    networks:
+      - dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  da-backend:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+    depends_on:
+      da-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://da-db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_LIQUIBASE_USER: ${DB_USER}
+      SPRING_LIQUIBASE_PASSWORD: ${DB_PASSWORD}
+      JAVA_OPTS: ${JAVA_OPTS:-Xmx512m}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-dev}
+    networks:
+      - dev
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s

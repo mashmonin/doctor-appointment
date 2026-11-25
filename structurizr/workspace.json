@@ -1,0 +1,391 @@
+{
+  "configuration" : { },
+  "description" : "Информационная система клиники Lavamed",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedDate" : "2026-06-18T20:11:41Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Пользователь системы, записывающийся к врачу",
+      "id" : "2",
+      "name" : "Пациент",
+      "properties" : {
+        "structurizr.dsl.identifier" : "patient"
+      },
+      "relationships" : [ {
+        "description" : "Открывает приложение, записывается к врачу, просматривает список записей",
+        "destinationId" : "4",
+        "id" : "10",
+        "sourceId" : "2",
+        "tags" : "Relationship,Approved",
+        "technology" : "HTTPS"
+      }, {
+        "description" : "Открывает приложение, записывается к врачу, просматривает список записей",
+        "destinationId" : "3",
+        "id" : "11",
+        "linkedRelationshipId" : "10",
+        "sourceId" : "2",
+        "technology" : "HTTPS"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "properties" : {
+      "structurizr.groupSeparator" : "/"
+    },
+    "softwareSystems" : [ {
+      "description" : "Внешний сервис для отправки email-уведомлений пациентам",
+      "documentation" : { },
+      "id" : "1",
+      "name" : "Внешний почтовый клиент",
+      "properties" : {
+        "structurizr.dsl.identifier" : "emailClient"
+      },
+      "tags" : "Element,Software System,Approved"
+    }, {
+      "containers" : [ {
+        "description" : "Реверс-прокси: SSL-терминация и раздача статических файлов",
+        "documentation" : { },
+        "id" : "4",
+        "name" : "Nginx",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.nginx"
+        },
+        "relationships" : [ {
+          "description" : "Раздаёт статические файлы",
+          "destinationId" : "5",
+          "id" : "12",
+          "sourceId" : "4",
+          "tags" : "Relationship,Approved",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Проксирует API-запросы",
+          "destinationId" : "6",
+          "id" : "13",
+          "sourceId" : "4",
+          "tags" : "Relationship,Approved",
+          "technology" : "HTTP"
+        } ],
+        "tags" : "Element,Container,Infrastructure,Approved",
+        "technology" : "Nginx"
+      }, {
+        "description" : "Клиентское SPA-приложение для записи к врачу и просмотра списка записей",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Frontend",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.frontend"
+        },
+        "relationships" : [ {
+          "description" : "Отправляет API-запросы",
+          "destinationId" : "4",
+          "id" : "14",
+          "sourceId" : "5",
+          "tags" : "Relationship,Approved",
+          "technology" : "HTTPS"
+        } ],
+        "tags" : "Element,Container,Frontend,Approved",
+        "technology" : "Vite + React"
+      }, {
+        "description" : "Сервис бизнес-логики: управление записями и расписанием врачей",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "Backend",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.backend"
+        },
+        "relationships" : [ {
+          "description" : "Читает и записывает данные о записях, расписании и статусах отправки уведомлений",
+          "destinationId" : "7",
+          "id" : "15",
+          "sourceId" : "6",
+          "tags" : "Relationship,Approved",
+          "technology" : "JDBC"
+        }, {
+          "description" : "Публикует событие о создании записи в топик 1",
+          "destinationId" : "8",
+          "id" : "16",
+          "sourceId" : "6",
+          "tags" : "Relationship,Approved",
+          "technology" : "Kafka"
+        }, {
+          "description" : "Читает статус отправки уведомления из топика 2",
+          "destinationId" : "8",
+          "id" : "21",
+          "sourceId" : "6",
+          "tags" : "Relationship,Approved",
+          "technology" : "Kafka"
+        } ],
+        "tags" : "Element,Container,Backend,Approved",
+        "technology" : "Java Spring Boot + Gradle"
+      }, {
+        "description" : "Хранилище данных о пациентах, врачах и записях",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "Database",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.database"
+        },
+        "tags" : "Element,Container,Database,Approved",
+        "technology" : "PostgreSQL"
+      }, {
+        "description" : "Брокер сообщений для асинхронного обмена событиями между сервисами",
+        "documentation" : { },
+        "id" : "8",
+        "name" : "Apache Kafka",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.kafka"
+        },
+        "tags" : "Element,Container,Infrastructure,Approved",
+        "technology" : "Apache Kafka"
+      }, {
+        "description" : "Backend-сервис: получает события из топика 1 и отправляет email-уведомления пациентам через внешний почтовый клиент",
+        "documentation" : { },
+        "id" : "9",
+        "name" : "Сервис уведомлений",
+        "properties" : {
+          "structurizr.dsl.identifier" : "doctorAppointment.notificationService"
+        },
+        "relationships" : [ {
+          "description" : "Подписывается на топик 1, получает события о создании записей",
+          "destinationId" : "8",
+          "id" : "17",
+          "sourceId" : "9",
+          "tags" : "Relationship,Approved",
+          "technology" : "Kafka"
+        }, {
+          "description" : "Отправляет email-напоминание пациенту",
+          "destinationId" : "1",
+          "id" : "18",
+          "sourceId" : "9",
+          "tags" : "Relationship,Approved",
+          "technology" : "SMTP"
+        }, {
+          "description" : "Публикует статус отправки уведомления в топик 2",
+          "destinationId" : "8",
+          "id" : "20",
+          "sourceId" : "9",
+          "tags" : "Relationship,Approved",
+          "technology" : "Kafka"
+        } ],
+        "tags" : "Element,Container,Backend,Approved",
+        "technology" : "Java Spring Boot"
+      } ],
+      "description" : "Система онлайн-записи к врачу",
+      "documentation" : { },
+      "id" : "3",
+      "name" : "DoctorAppointment",
+      "properties" : {
+        "structurizr.dsl.identifier" : "doctorAppointment"
+      },
+      "relationships" : [ {
+        "description" : "Отправляет email-напоминание пациенту",
+        "destinationId" : "1",
+        "id" : "19",
+        "linkedRelationshipId" : "18",
+        "sourceId" : "3",
+        "technology" : "SMTP"
+      } ],
+      "tags" : "Element,Software System,Approved"
+    } ]
+  },
+  "name" : "Lavamed",
+  "properties" : {
+    "structurizr.inspection.error" : "4",
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "configuration" : {
+      "styles" : {
+        "elements" : [ {
+          "border" : "Solid",
+          "stroke" : "#2980b9",
+          "strokeWidth" : 5,
+          "tag" : "Approved"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "shape" : "RoundedBox",
+          "tag" : "Backend"
+        }, {
+          "border" : "Solid",
+          "stroke" : "#f39c12",
+          "strokeWidth" : 5,
+          "tag" : "Changed"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "shape" : "WebBrowser",
+          "tag" : "Frontend"
+        }, {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "shape" : "RoundedBox",
+          "tag" : "Infrastructure"
+        }, {
+          "border" : "Solid",
+          "stroke" : "#2ea44f",
+          "strokeWidth" : 5,
+          "tag" : "New"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        } ],
+        "relationships" : [ {
+          "color" : "#2980b9",
+          "tag" : "Approved",
+          "thickness" : 3
+        }, {
+          "color" : "#f39c12",
+          "tag" : "Changed",
+          "thickness" : 3
+        }, {
+          "color" : "#2ea44f",
+          "tag" : "New",
+          "thickness" : 3
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "name" : "Container View: DoctorAppointment",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "10"
+      }, {
+        "id" : "12"
+      }, {
+        "id" : "13"
+      }, {
+        "id" : "14"
+      }, {
+        "id" : "15"
+      }, {
+        "id" : "16"
+      }, {
+        "id" : "17"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "21"
+      } ],
+      "softwareSystemId" : "3",
+      "title" : "DoctorAppointment — Контейнеры"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
+      "name" : "System Context View: DoctorAppointment",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "11"
+      }, {
+        "id" : "19"
+      } ],
+      "softwareSystemId" : "3",
+      "title" : "DoctorAppointment — Контекст системы"
+    }, {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "EmailClientContext",
+      "name" : "System Context View: Внешний почтовый клиент",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "19"
+      } ],
+      "softwareSystemId" : "1",
+      "title" : "Внешний почтовый клиент — Контекст системы"
+    } ]
+  }
+}

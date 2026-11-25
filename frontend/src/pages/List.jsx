@@ -22,7 +22,7 @@ const List = () => {
 
             if (response.status === 200 && response.data && response.data.content) {
                 setData(response.data.content || []); // Устанавливаем полученные данные
-                setTotalRecords(response.data.totalRecords || 0); // Определяем общее число страниц
+                setTotalRecords(response.data.totalElements || 0); // Определяем общее число страниц
             } else {
                 console.warn('Некорректный ответ сервера');
             }

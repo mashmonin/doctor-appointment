@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class DoctorAppointmentController {
     @PostMapping("/list")
     @Operation(summary = "Получает список записей к врачу с учетом фильтрации и пагинации")
     public Page<DoctorAppointmentShortDto> getPageOfDoctorAppointment(
-            @Parameter(description = "Параметры пагинации") Pageable pageable,
+            @Parameter(description = "Параметры пагинации") @PageableDefault(sort = "id") Pageable pageable,
             @Parameter(description = "Объект фильтра") @RequestBody FilterDto filterDto) {
         logger.info("Received FilterDto: {}", filterDto.toString());
         return doctorAppointmentService.getPageOfDoctorAppointment(pageable, filterDto);

@@ -18,7 +18,7 @@ import com.example.backend.common.specification.BaseSpecification;
 
 import static com.example.backend.common.specification.utils.SpecificationUtils.*;
 import static com.example.backend.common.utils.Attributes.*;
-import static com.example.backend.common.utils.StringUtils.getReplacedPattern;
+import static com.example.backend.common.utils.StringUtils.normalizeSearchText;
 
 /**
  * Реализация {@link BaseSpecification} для записей к врачу
@@ -42,7 +42,7 @@ public class DoctorAppointmentSpecification implements BaseSpecification<DoctorA
             createOrPeriodPredicate(cb, r, filter.getCreationDate(), CREATION_DATE, andPredicates);
 
             List<Predicate> orPredicates = new ArrayList<>();
-            var replacedText = getReplacedPattern(filter.getText());
+            var replacedText = normalizeSearchText(filter.getText());
             if (isNotEmpty(replacedText)) {
                 createTextPredicates(replacedText, r, cb, orPredicates);
             }

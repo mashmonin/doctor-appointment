@@ -19,22 +19,32 @@ public class StringUtils {
 
     public static final char I_CHAR = 'и';
 
+    public static final char LIKE_ESCAPE_CHAR = '\\';
+
     private static final String LIKE_WILDCARD = "%";
 
     private StringUtils() {}
 
     /**
-     * Заменяет символы в строке поиска
+     * Подготавливает введённую пользователем строку поиска: обрезает пробелы по краям
      * @param searchField строка поиска
-     * @return строка поиска с заменными символами
+     * @return строка без пробелов по краям или null
      */
-    public static String getReplacedPattern(String searchField) {
-        return searchField == null ? null:
-                searchField
-                        .replace("\\", "\\\\")
-                        .replace("'", "\\'")
-                        .replace("`", "\\'")
-                        .replace("\"", "\\\"");
+    public static String normalizeSearchText(String searchField) {
+        return searchField == null ? null : searchField.strip();
+    }
+
+    /**
+     * Экранирует специальные символы оператора like ("\\", "%" и "_"),
+     * чтобы они искались как обычные символы. Использовать вместе с escape-символом {@link #LIKE_ESCAPE_CHAR}
+     * @param text строка поиска
+     * @return строка с экранированными символами
+     */
+    public static String escapeLikeWildcards(String text) {
+        return text
+                .replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_");
     }
 
     /**

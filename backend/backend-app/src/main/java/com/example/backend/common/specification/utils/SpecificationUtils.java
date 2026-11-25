@@ -14,6 +14,8 @@ import static com.example.backend.common.utils.StringUtils.E_CHAR;
 import static com.example.backend.common.utils.StringUtils.YO_CHAR;
 import static com.example.backend.common.utils.StringUtils.I_CHAR;
 import static com.example.backend.common.utils.StringUtils.IY_CHAR;
+import static com.example.backend.common.utils.StringUtils.LIKE_ESCAPE_CHAR;
+import static com.example.backend.common.utils.StringUtils.escapeLikeWildcards;
 import static com.example.backend.common.utils.StringUtils.getLetterReplacedPattern;
 import com.example.backend.model.PeriodDto;
 import com.example.backend.common.exception.CriteriaFilteringException;
@@ -36,7 +38,8 @@ public class SpecificationUtils {
      * @return like-предикат
      */
     public static Predicate createLikePredicate(Root<?> r, CriteriaBuilder cb, String text, String attributeName) {
-        return cb.like(getReplaceExpression(r, cb, attributeName), "%" + getLetterReplacedPattern(text) + "%");
+        return cb.like(getReplaceExpression(r, cb, attributeName),
+                "%" + escapeLikeWildcards(getLetterReplacedPattern(text)) + "%", LIKE_ESCAPE_CHAR);
     }
 
     private static Expression<String> getReplaceExpression(Expression<String> exp, CriteriaBuilder cb) {

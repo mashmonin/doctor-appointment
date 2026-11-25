@@ -4,9 +4,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - './nginx.prod.conf:/etc/nginx/nginx.conf:ro'
+      - './infra/nginx/prod.conf:/etc/nginx/nginx.conf:ro'
       - type: bind
-        source: ./certs
+        source: ./infra/certs
         target: /etc/nginx/certs
         read_only: true
   da-db:

@@ -3,7 +3,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - './nginx.dev.conf:/etc/nginx/nginx.conf:ro'
+      - './infra/nginx/dev.conf:/etc/nginx/nginx.conf:ro'
 
   da-db:
     ports:

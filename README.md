@@ -43,7 +43,7 @@ docker compose down -v     # вместе с данными БД
 
 ## Продакшен
 
-Нужны сертификаты в `certs/` (`fullchain.pem` и `privkey.pem`):
+Нужны сертификаты в `infra/certs/` (`fullchain.pem` и `privkey.pem`):
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
@@ -57,5 +57,5 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 backend/     Spring Boot API (Gradle wrapper внутри)
 frontend/    Vite + React
 structurizr/ архитектурная модель (Structurizr DSL)
-nginx*.conf  конфиги nginx для dev и prod
+infra/       конфиги nginx (dev, prod) и сертификаты для prod
 ```

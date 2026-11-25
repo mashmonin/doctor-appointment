@@ -28,7 +28,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      - pg_doctor_appointment:/var/lib/postgresql/data
+      - pg_doctor_appointment:/var/lib/postgresql
     networks:
       - dev
     healthcheck:

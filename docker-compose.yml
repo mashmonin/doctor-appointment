@@ -23,7 +23,6 @@ services:
 
   da-db:
     image: postgres:18
-    restart: always
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USER}
@@ -40,7 +39,6 @@ services:
       start_period: 10s
 
   da-backend:
-    restart: always
     build:
       context: ./backend
       dockerfile: docker/Dockerfile

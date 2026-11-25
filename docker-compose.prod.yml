@@ -9,3 +9,8 @@ services:
         source: ./certs
         target: /etc/nginx/certs
         read_only: true
+  da-db:
+    restart: unless-stopped
+
+  da-backend:
+    restart: unless-stopped
